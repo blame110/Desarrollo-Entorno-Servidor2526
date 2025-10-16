@@ -2,27 +2,27 @@ package com.calabozo.mapa.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.calabozo.mapa.model.Ciudad;
 import com.calabozo.mapa.repository.CiudadRepository;
 
-import jakarta.websocket.server.PathParam;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
 @Controller
 @RequestMapping("/ciudades")
 public class cityController {
+
+    // Creamos el loger
+    private Logger logger = LoggerFactory.getLogger(cityController.class);
 
     @Autowired
     private CiudadRepository ciudadRepository;
@@ -49,6 +49,7 @@ public class cityController {
         else {
             ciudadRepository.deleteById(id);
             redAttrib.addFlashAttribute("success", "Se ha borrado Correctamente la ciudad con id " + id);
+            logger.info("Se ha borrado Correctamente la ciudad con id " + id);
         }
 
         return "redirect:/ciudades";
@@ -71,6 +72,8 @@ public class cityController {
 
         ciudadRepository.save(ciudad);
 
+        logger.info("Se ha creado la ciudad con id " + ciudad.getId());
+
         return "redirect:/ciudades";
     }
 
@@ -88,10 +91,7 @@ public class cityController {
             ciudad = ciudadRepository.findById(id).get();
         // Cargamos la ciudad en el model y cargamos la vista
         model.addAttribute("ciudad", ciudad);
-        // TODO la fecha no la coge bien el type=date de html5 al estar guardada
-        // en formato americano en bd y intentar mostrarse en un navegador con formato
-        // español
-        // todo:solucionarlo
+
         return "editarCiudad";
     }
 

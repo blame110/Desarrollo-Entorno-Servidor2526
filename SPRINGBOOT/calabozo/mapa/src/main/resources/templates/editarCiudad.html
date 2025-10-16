@@ -34,6 +34,7 @@
                 <input type="date" step="1" th:field="*{fechaFundacion}" id="fechaFundacion" class="form-control"
                     placeholder="fechaFundacion" required>
             </div>
+            <input type="hidden" th:field="*{id}">
 
             <button type="submit" class="btn btn-success">Guardar Ciudad</button>
             <a th:href="@{/ciudades}" class="btn btn-secondary">Cancelar</a>
